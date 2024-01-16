@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace GrantHolle\LaravelModelFilters\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class LaravelModelFiltersCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'laravel-model-filters';
 
     public $description = 'My command';
 
