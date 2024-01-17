@@ -35,13 +35,13 @@
     },
     "autoload": {
         "psr-4": {
-            "GrantHolle\\LaravelModelFilters\\": "src/",
-            "GrantHolle\\LaravelModelFilters\\Database\\Factories\\": "database/factories/"
+            "GrantHolle\\ModelFilters\\": "src/",
+            "GrantHolle\\ModelFilters\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "GrantHolle\\LaravelModelFilters\\Tests\\": "tests/",
+            "GrantHolle\\ModelFilters\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/"
         }
     },
@@ -73,11 +73,8 @@
     "extra": {
         "laravel": {
             "providers": [
-                "GrantHolle\\LaravelModelFilters\\LaravelModelFiltersServiceProvider"
-            ],
-            "aliases": {
-                "LaravelModelFilters": "GrantHolle\\LaravelModelFilters\\Facades\\LaravelModelFilters"
-            }
+                "GrantHolle\\ModelFilters\\ModelFiltersServiceProvider"
+            ]
         }
     },
     "minimum-stability": "dev",

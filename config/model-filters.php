@@ -1,6 +1,6 @@
 <?php
 
-// config for GrantHolle/LaravelModelFilters
+// config for GrantHolle/ModelFilters
 return [
 
 ];

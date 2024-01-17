@@ -1,5 +1,5 @@
 <?php
 
-use GrantHolle\LaravelModelFilters\Tests\TestCase;
+use GrantHolle\ModelFilters\Tests\TestCase;
 
 uses(TestCase::class)->in(__DIR__);

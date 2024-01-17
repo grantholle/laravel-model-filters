@@ -52,7 +52,7 @@ php artisan vendor:publish --tag="laravel-model-filters-views"
 ## Usage
 
 ```php
-$laravelModelFilters = new GrantHolle\LaravelModelFilters();
+$laravelModelFilters = new GrantHolle\ModelFilters();
 echo $laravelModelFilters->echoPhrase('Hello, GrantHolle!');
 ```
 

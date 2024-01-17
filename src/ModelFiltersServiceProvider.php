@@ -1,12 +1,12 @@
 <?php
 
-namespace GrantHolle\LaravelModelFilters;
+namespace GrantHolle\ModelFilters;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use GrantHolle\LaravelModelFilters\Commands\LaravelModelFiltersCommand;
+use GrantHolle\ModelFilters\Commands\ModelFiltersCommand;
 
-class LaravelModelFiltersServiceProvider extends PackageServiceProvider
+class ModelFiltersServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {
@@ -17,7 +17,6 @@ class LaravelModelFiltersServiceProvider extends PackageServiceProvider
          */
         $package
             ->name('laravel-model-filters')
-            ->hasConfigFile()
-            ->hasCommand(LaravelModelFiltersCommand::class);
+            ->hasConfigFile();
     }
 }
