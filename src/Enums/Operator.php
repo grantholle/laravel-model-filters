@@ -29,7 +29,7 @@ enum Operator: string
             self::ends_with => __('Ends with'),
             self::not_ends_with => __("Doesn't end with"),
             self::in => __('In'),
-            self::not_in => __("Not in"),
+            self::not_in => __('Not in'),
             self::equals => __('Equals'),
             self::not_equals => __("Doesn't equal"),
             self::greater_than => __('Greater than'),

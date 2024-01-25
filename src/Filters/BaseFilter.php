@@ -13,11 +13,17 @@ abstract class BaseFilter
     use Conditionable;
 
     public bool $showAsAvailable = true;
+
     public Component $component = Component::text;
+
     public array $operators = [];
+
     public array $componentProps = [];
+
     public Closure $callback;
+
     public mixed $currentValue = null;
+
     public Operator $operator;
 
     public function __construct(public string $key, public string $label)
@@ -98,7 +104,6 @@ abstract class BaseFilter
     /**
      * Determines whether to include this filter in the available filters list.
      *
-     * @param bool $available
      * @return $this
      */
     public function hide(bool $available = false): static

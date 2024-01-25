@@ -2,9 +2,9 @@
 
 namespace GrantHolle\ModelFilters\Tests;
 
+use GrantHolle\ModelFilters\ModelFiltersServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use GrantHolle\ModelFilters\ModelFiltersServiceProvider;
 
 class TestCase extends Orchestra
 {
