@@ -24,6 +24,7 @@ class ModelFiltersServiceProvider extends PackageServiceProvider
     public function packageBooted()
     {
         Request::macro('currentFilters', function () {
+            /** @var Request $this */
             return $this->collect(config('model-filters.filter_key'))
                 ->mapWithKeys(function (array $filter, $key) {
                     $key = $key ?? $filter['_id'] ?? Str::random(3);
