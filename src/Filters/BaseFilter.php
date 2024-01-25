@@ -6,9 +6,13 @@ use Closure;
 use GrantHolle\ModelFilters\Enums\Component;
 use GrantHolle\ModelFilters\Enums\Operator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Traits\Conditionable;
 
 abstract class BaseFilter
 {
+    use Conditionable;
+
+    public bool $showAsAvailable = true;
     public Component $component = Component::text;
     public array $operators = [];
     public array $componentProps = [];
@@ -23,16 +27,7 @@ abstract class BaseFilter
     public function __invoke(Builder $builder, Closure $next)
     {
         if (! isset($this->callback) || ! is_callable($this->callback)) {
-            $this->callback = function (Builder $builder, mixed $value) {
-                $function = $this->operator->getBuilderFunction();
-                $arguments = array_filter([
-                    $this->key,
-                    $this->getSqlOperator(),
-                    $this->transformValue($value),
-                ]);
-
-                return $builder->$function(...$arguments);
-            };
+            $this->callback = $this->defaultCallback();
         }
 
         return $next(($this->callback)($builder, $this->currentValue));
@@ -100,6 +95,26 @@ abstract class BaseFilter
         return $this;
     }
 
+    /**
+     * Determines whether to include this filter in the available filters list.
+     *
+     * @param bool $available
+     * @return $this
+     */
+    public function hide(bool $available = false): static
+    {
+        $this->showAsAvailable = $available;
+
+        return $this;
+    }
+
+    public function withComponent(Component $component): static
+    {
+        $this->component = $component;
+
+        return $this;
+    }
+
     public function getSqlOperator(): ?string
     {
         return $this->operator->getSqlOperator(config('database.default'));
@@ -113,6 +128,20 @@ abstract class BaseFilter
     public function defaultValue(): mixed
     {
         return null;
+    }
+
+    public function defaultCallback(): Closure
+    {
+        return function (Builder $builder, mixed $value) {
+            $function = $this->operator->getBuilderFunction();
+            $arguments = array_filter([
+                $this->key,
+                $this->getSqlOperator(),
+                $this->transformValue($value),
+            ]);
+
+            return $builder->$function(...$arguments);
+        };
     }
 
     public function toArray(): array

@@ -4,16 +4,15 @@ namespace GrantHolle\ModelFilters\Traits;
 
 use GrantHolle\ModelFilters\Filters\BaseFilter;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Pipeline;
 
 trait HasFilters
 {
-    public function scopeFilter(Builder $builder, array $data)
+    public function scopeFilter(Builder $builder, Collection|array $data)
     {
         $filters = $this->filtersByKey();
-        $pipes = collect(Arr::isAssoc($data) ? [$data] : $data)
+        $pipes = collect($data)
             ->filter(fn (array $set) => isset($set['key'])
                 && isset($set['value'])
                 && $filters->has($set['key']))
@@ -21,7 +20,11 @@ trait HasFilters
                 /** @var BaseFilter $base */
                 $base = $filters->get($set['key']);
                 $filter = clone $base;
-                $filter->withOperator($set['operator'] ?? null)
+                $filter
+                    ->when(
+                        isset($set['operator']),
+                        fn (BaseFilter $filter) => $filter->withOperator($set['operator'])
+                    )
                     ->withValue($set['value']);
 
                 return $filter;
@@ -31,11 +34,6 @@ trait HasFilters
         return Pipeline::send($builder)
             ->through($pipes)
             ->thenReturn();
-        return $builder->where(
-            fn (Builder $builder) => Pipeline::send($builder)
-                ->through($pipes)
-                ->thenReturn()
-        );
     }
 
     public function filters(): array
@@ -43,10 +41,12 @@ trait HasFilters
         return [];
     }
 
-    public function filtersToArray(): array
+    public function availableFiltersToArray(): array
     {
         return collect($this->filters())
+            ->filter(fn (BaseFilter $filter) => $filter->showAsAvailable)
             ->map(fn (BaseFilter $filter) => $filter->toArray())
+            ->values()
             ->toArray();
     }
 

@@ -5,5 +5,6 @@ namespace GrantHolle\ModelFilters\Enums;
 enum Component: string
 {
     case text = 'text';
-    case select = 'select';
+    case checkbox_group = 'checkbox_group';
+    case combobox = 'combobox';
 }

@@ -2,9 +2,10 @@
 
 namespace GrantHolle\ModelFilters;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use GrantHolle\ModelFilters\Commands\ModelFiltersCommand;
 
 class ModelFiltersServiceProvider extends PackageServiceProvider
 {
@@ -18,5 +19,21 @@ class ModelFiltersServiceProvider extends PackageServiceProvider
         $package
             ->name('laravel-model-filters')
             ->hasConfigFile();
+    }
+
+    public function packageBooted()
+    {
+        Request::macro('currentFilters', function () {
+            return $this->collect(config('model-filters.filter_key'))
+                ->mapWithKeys(function (array $filter, $key) {
+                    $key = $key ?? $filter['_id'] ?? Str::random(3);
+
+                    return [$key => [
+                        'key' => $filter['key'],
+                        'operator' => $filter['operator'] ?? null,
+                        'value' => $filter['value'] ?? null,
+                    ]];
+                });
+        });
     }
 }
