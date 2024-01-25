@@ -27,8 +27,6 @@ class ModelFiltersServiceProvider extends PackageServiceProvider
             /** @var Request $this */
             return $this->collect(config('model-filters.filter_key'))
                 ->mapWithKeys(function (array $filter, $key) {
-                    $key = $key ?? $filter['_id'] ?? Str::random(3);
-
                     return [$key => [
                         'key' => $filter['key'],
                         'operator' => $filter['operator'] ?? null,

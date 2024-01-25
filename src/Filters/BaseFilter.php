@@ -26,12 +26,13 @@ abstract class BaseFilter
 
     public Operator $operator;
 
-    public function __construct(public string $key, public string $label)
+    final public function __construct(public string $key, public string $label)
     {
     }
 
     public function __invoke(Builder $builder, Closure $next)
     {
+        /** @phpstan-ignore-next-line */
         if (! isset($this->callback) || ! is_callable($this->callback)) {
             $this->callback = $this->defaultCallback();
         }
