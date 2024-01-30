@@ -13,10 +13,20 @@ trait HasFilters
     {
         $filters = $this->filtersByKey();
         $pipes = collect($data)
-            ->filter(fn (array $set) => isset($set['key'])
-                && isset($set['value'])
-                && $filters->has($set['key']))
-            ->map(function (array $set) use ($filters) {
+            ->filter(function ($set, $key) use ($filters) {
+                if (is_array($set)) {
+                    return $filters->has($set['key'])
+                        && isset($set['key'])
+                        && isset($set['value']);
+                }
+
+                return $filters->has($key);
+            })
+            ->map(function ($set, $key) use ($filters) {
+                if (! is_array($set)) {
+                    $set = ['key' => $key, 'value' => $set];
+                }
+
                 /** @var BaseFilter $base */
                 $base = $filters->get($set['key']);
                 $filter = clone $base;
