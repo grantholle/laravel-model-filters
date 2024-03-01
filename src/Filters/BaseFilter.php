@@ -161,4 +161,13 @@ abstract class BaseFilter
             'defaultValue' => $this->defaultValue(),
         ];
     }
+
+    public function toFilterArray(): array
+    {
+        return [
+            'key' => $this->key,
+            'operator' => $this->operator?->value,
+            'value' => $this->currentValue,
+        ];
+    }
 }

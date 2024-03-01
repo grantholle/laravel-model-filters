@@ -11,12 +11,20 @@ trait HasFilters
 {
     public function scopeFilter(Builder $builder, Collection|array $data)
     {
+        return Pipeline::send($builder)
+            ->through($this->getActiveFilters($data))
+            ->thenReturn();
+    }
+
+    public function getActiveFilters(Collection|array $data): array
+    {
         $filters = $this->filtersByKey();
-        $pipes = collect($data)
+
+        return collect($data)
             ->filter(function ($set, $key) use ($filters) {
                 if (is_array($set)) {
-                    return $filters->has($set['key'])
-                        && isset($set['key'])
+                    return isset($set['key'])
+                        && $filters->has($set['key'])
                         && isset($set['value']);
                 }
 
@@ -40,15 +48,19 @@ trait HasFilters
                 return $filter;
             })
             ->toArray();
-
-        return Pipeline::send($builder)
-            ->through($pipes)
-            ->thenReturn();
     }
 
     public function filters(): array
     {
         return [];
+    }
+
+    public function activeFiltersToArray(Collection|array $data): object
+    {
+        return (object) collect($this->getActiveFilters($data))
+            ->filter(fn (BaseFilter $filter) => $filter->showAsAvailable)
+            ->map(fn (BaseFilter $filter) => $filter->toFilterArray())
+            ->toArray();
     }
 
     public function availableFiltersToArray(): array

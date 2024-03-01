@@ -33,5 +33,18 @@ class ModelFiltersServiceProvider extends PackageServiceProvider
                     ]];
                 });
         });
+
+        Request::macro('addFilter', function (string|array $key, mixed $value = null) {
+            $data = $this->all();
+            $filters = $data[config('model-filters.filter_key')] ?? [];
+            $filters[$key] = [
+                'key' => $key,
+                'value' => $value,
+            ];
+            $data[config('model-filters.filter_key')] = $filters;
+            $this->merge($data);
+
+            return $this;
+        });
     }
 }
